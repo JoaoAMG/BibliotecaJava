@@ -1,5 +1,6 @@
 package com.joaofematheus.biblioteca.dao;
 
+import com.joaofematheus.biblioteca.model.Emprestimo;
 import com.joaofematheus.biblioteca.model.ItemEmprestimo;
 import com.joaofematheus.biblioteca.model.Livro;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,13 @@ public class DAOItemEmprestimo {
 
     private final DataSource dataSource;
     private final DAOLivro daoLivro; 
+    private final DAOEmprestimo daoemprestimo;
 
     @Autowired
-    public DAOItemEmprestimo(DataSource dataSource, DAOLivro daoLivro) {
+    public DAOItemEmprestimo(DataSource dataSource, DAOLivro daoLivro, DAOEmprestimo daoemprestimo) {
         this.dataSource = dataSource;
         this.daoLivro = daoLivro;
+        this.daoemprestimo = daoemprestimo;
     }
 
     
@@ -29,18 +32,20 @@ public class DAOItemEmprestimo {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-        	stmt.setInt(1, item.getId());
-            stmt.setInt(2, item.getLivro().getId());
+            stmt.setInt(1, item.getLivro().getId());
+            stmt.setInt(2, item.getEmprestimo().getId());
             stmt.setInt(3, item.getQuantidade());
 
             stmt.executeUpdate();
 
+         
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             if (generatedKeys.next()) {
                 item.setId(generatedKeys.getInt(1)); 
             }
         }
     }
+
 
     
     public ItemEmprestimo buscarPorId(int id) throws SQLException {
@@ -54,10 +59,11 @@ public class DAOItemEmprestimo {
 
             if (rs.next()) {
                 Livro livro = daoLivro.buscarPorId(rs.getInt("livro_id"));
-
+                Emprestimo emprestimo = daoemprestimo.buscarPorId(rs.getInt("emprestimo_id"));
                 return new ItemEmprestimo(
                         rs.getInt("id"),
                         livro,
+                        emprestimo, 
                         rs.getInt("quantidade")
                 );
             }
@@ -76,10 +82,12 @@ public class DAOItemEmprestimo {
 
             while (rs.next()) {
                 Livro livro = daoLivro.buscarPorId(rs.getInt("livro_id"));
+                Emprestimo emprestimo = daoemprestimo.buscarPorId(rs.getInt("emprestimo_id")); // 🔹 Buscando o emprestimo
 
                 itemEmprestimolist.add(new ItemEmprestimo(
                         rs.getInt("id"),
                         livro,
+                        emprestimo, 
                         rs.getInt("quantidade")
                 ));
             }

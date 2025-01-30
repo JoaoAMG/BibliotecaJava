@@ -79,10 +79,16 @@ public class DAOEmprestimo {
                 while (rs.next()) {
                     int livroId = rs.getInt("livro_id");
                     Livro livro = buscarLivroPorId(livroId, connection);
+                    
+                    
+                    Emprestimo emprestimo = new Emprestimo();
+                    emprestimo.setId(emprestimoId);
 
+                    
                     ItemEmprestimo item = new ItemEmprestimo(
                         rs.getInt("id"),
                         livro,
+                        emprestimo, 
                         rs.getInt("quantidade")
                     );
                     itens.add(item);

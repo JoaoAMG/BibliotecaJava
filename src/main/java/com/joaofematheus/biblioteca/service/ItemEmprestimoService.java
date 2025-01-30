@@ -2,14 +2,18 @@ package com.joaofematheus.biblioteca.service;
 
 import com.joaofematheus.biblioteca.dao.DAOItemEmprestimo;
 import com.joaofematheus.biblioteca.model.ItemEmprestimo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ItemEmprestimoService {
     private final DAOItemEmprestimo daoItemEmprestimo;
 
+    @Autowired
     public ItemEmprestimoService(DAOItemEmprestimo daoItemEmprestimo) {
         this.daoItemEmprestimo = daoItemEmprestimo;
     }
@@ -56,4 +60,3 @@ public class ItemEmprestimoService {
         }
     }
 }
-

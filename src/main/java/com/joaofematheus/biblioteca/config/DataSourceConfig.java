@@ -97,7 +97,7 @@ public class DataSourceConfig {
 
             System.out.println("Conexão com o banco de dados bem-sucedida!");
 
-            // Criar tabela Livro primeiro
+            
             String createLivroTable = """
                 CREATE TABLE IF NOT EXISTS Livro (
                     id INT AUTO_INCREMENT PRIMARY KEY,

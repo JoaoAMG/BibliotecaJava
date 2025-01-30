@@ -12,6 +12,8 @@ public class Emprestimo {
         this.numerodias = numerodias;
         this.livros = livros;
     }
+    public Emprestimo() {
+    }
 
     
     public Emprestimo(int id, int numerodias) {
